@@ -32,3 +32,8 @@ Run from root via:
 ```json
 java -jar build/libs/interviewtest-0.0.1-SNAPSHOT.jar
 ```
+
+##### Running in IDE
+Project uses [Lombok](https://projectlombok.org/) annotations to reduce boiler plate code.   
+To run app via IDE, Lombok plugin has to be installed and Annotation processing enabled in settings.  
+(`IntelliJ IDEA`: Build,Exe.. > Compiler > Annotation Processors > enable annotation processing)

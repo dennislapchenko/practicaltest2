@@ -1,8 +1,8 @@
-#Country Calling Code Locator
+# Country Calling Code Locator
 
 Scrapes wiki page with calling codes and lets the user query by the code.
 
-###Endpoint
+### Endpoint
 `GET /api/callingcode/:code`  
 
 ##### Example Request:
@@ -22,7 +22,7 @@ http://localhost:8080/api/callingcode/371
 {"ok":false,"error":"Invalid code format."}
 ```
 
-###Running
+### Running
 Build jar (via spring boot plugin):
 ```json
 ./gradlew clean bootJar

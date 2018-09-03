@@ -1,0 +1,53 @@
+buildscript {
+	ext {
+		springBootVersion = '2.0.4.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+idea {
+	module {
+		outputDir file('build/classes/main')
+		testOutputDir file('build/classes/test')
+	}
+}
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+apply from: "build-config/plugins/java-code-quality.gradle"
+
+group = 'com.neotech'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+test {
+	reports.html.destination(file("$buildDir/reports/junit-html"))
+
+	afterTest { desc, result ->
+		logger.quiet "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+	}
+}
+
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile("org.springframework.boot:spring-boot-devtools")
+	compile 'org.jsoup:jsoup:1.11.3'
+
+	compileOnly('org.projectlombok:lombok')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.18.0'
+	testCompileOnly('org.projectlombok:lombok')
+}
+

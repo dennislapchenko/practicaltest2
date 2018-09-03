@@ -1,0 +1,104 @@
+apply plugin: 'pmd'
+apply plugin: 'findbugs'
+apply plugin: CodeQualityPlugin
+
+class CodeQualityPlugin implements Plugin<Project>
+{
+	void apply(Project project)
+	{
+		project.extensions.create("codeQuality", CodeQuality)
+		Task setupCodeQuality = project.tasks.create("setupCodeQuality")
+		setupCodeQuality.doFirst {
+			project.getTasks().withType(FindBugs) {
+				// should work but doesn't
+				exclude project.codeQuality.exclude
+//				classes = classes.getAsFileTree().exclude(project.codeQuality.exclude)
+
+				reports {
+					xml.enabled = project.codeQuality.xmlReports
+					html.enabled = !xml.enabled
+				}
+			}
+
+			project.getTasks().withType(Pmd) {
+				exclude project.codeQuality.exclude
+
+				reports {
+					xml.enabled = project.codeQuality.xmlReports
+					html.enabled = !xml.enabled
+				}
+			}
+		}
+
+		getTask("pmdMain", project).dependsOn(setupCodeQuality)
+		getTask("findbugsMain", project).dependsOn(setupCodeQuality)
+	}
+
+	private boolean hasTask(taskName, project)
+	{
+		try
+		{
+			getTask(taskName, project)
+			return true;
+		}
+		catch (UnknownTaskException e)
+		{
+			return false;
+		}
+	}
+
+	private Task getTask(String task, Project project)
+	{
+		project.tasks.getByName(task)
+	}
+}
+
+class CodeQuality
+{
+	String[] exclude = []
+	Boolean xmlReports = false
+}
+
+findbugs {
+	ignoreFailures = true
+	sourceSets = [sourceSets.main]
+	reportsDir = new File(project.buildDir, 'reports/findbugs')
+	effort = "max"
+	excludeFilter = file(new File(project.rootDir, 'build-config/findbugs-exclude-filter.xml'))
+}
+
+tasks.withType(FindBugs) {
+	// should work but doesn't
+	// exclude []
+	//classes = classes.getAsFileTree().exclude([])
+
+	reports {
+		xml.enabled = project.codeQuality.xmlReports
+		html.enabled = !xml.enabled
+	}
+}
+
+pmd {
+	ignoreFailures = true
+	sourceSets = [sourceSets.main]
+	reportsDir = new File(project.buildDir, 'reports/pmd')
+	ruleSetFiles = files(new File(project.rootDir, 'build-config/pmd-ruleset.xml'))
+	toolVersion = '5.4.0'
+}
+
+dependencies {
+	pmd(
+			'net.sourceforge.pmd:pmd-core:5.4.0',
+			'net.sourceforge.pmd:pmd-java:5.4.0'
+	)
+}
+
+tasks.withType(Pmd) {
+	// should work but doesn't
+	// exclude []
+
+	reports {
+		xml.enabled = project.codeQuality.xmlReports
+		html.enabled = !xml.enabled
+	}
+}

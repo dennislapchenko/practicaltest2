@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+ Copyright (c) 2011 Neoworks
+-->
+<!-- Conceptually, a filter matches bug instances against a set of criteria.
+	By defining a filter, you can select bug instances for special treatment; 
+	for example, to exclude or include them in a report.
+	See: http://findbugs.sourceforge.net/manual/filter.html 
+	Additionally you can set findbugs.training=true in the firebug.properties
+	File to filter out specific bugs that are currently being reported.
+-->
+
+<FindBugsFilter>
+	<Match><Bug code="SnVI" /></Match>
+	<Match><Bug pattern="DM_CONVERT_CASE" /></Match>
+	<Match><Bug pattern="NM_CONFUSING" /></Match>
+	<Match><Bug pattern="RI_REDUNDANT_INTERFACES" /></Match>
+	<Match><Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" /></Match>
+	<Match><Bug pattern="SE_INNER_CLASS" /></Match>
+	<Match><Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" /></Match>
+	<Match><Bug pattern="EI_EXPOSE_REP" /></Match>
+	<Match><Bug pattern="EI_EXPOSE_REP2" /></Match>
+</FindBugsFilter>
